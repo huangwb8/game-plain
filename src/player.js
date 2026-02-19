@@ -16,9 +16,9 @@ export class Player {
     this._buffs = {};
   }
 
-  // 激活 buff
-  applyBuff(type) {
-    this._buffs[type] = BUFF_DURATIONS[type] ?? 5;
+  // 激活 buff（multiplier 由侧边栏时长滑块控制）
+  applyBuff(type, multiplier = 1) {
+    this._buffs[type] = (BUFF_DURATIONS[type] ?? 5) * multiplier;
   }
 
   // 当前是否有某 buff
@@ -41,7 +41,7 @@ export class Player {
     return this.hasBuff('shield');
   }
 
-  update(dt, keys, canvasW, onShoot) {
+  update(dt, keys, canvasW, canvasH, onShoot) {
     // 更新 buff 计时
     for (const type of Object.keys(this._buffs)) {
       this._buffs[type] -= dt;
@@ -49,11 +49,14 @@ export class Player {
     }
 
     // 移动
-    if (keys['ArrowLeft'] || keys['KeyA']) this.x -= this.speed * dt;
+    if (keys['ArrowLeft']  || keys['KeyA']) this.x -= this.speed * dt;
     if (keys['ArrowRight'] || keys['KeyD']) this.x += this.speed * dt;
+    if (keys['ArrowUp']    || keys['KeyW']) this.y -= this.speed * dt;
+    if (keys['ArrowDown']  || keys['KeyS']) this.y += this.speed * dt;
 
     // 边界限制
     this.x = Math.max(0, Math.min(canvasW - this.w, this.x));
+    this.y = Math.max(0, Math.min(canvasH - this.h, this.y));
 
     // 射击
     this._fireCooldown -= dt;

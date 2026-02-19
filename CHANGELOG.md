@@ -7,7 +7,13 @@
 ## [Unreleased]
 
 ### Added（新增）
-- 新增 `src/buff.js`：Buff 掉落系统，敌机被击毁时 30% 概率掉落菱形 buff（速射/加速/护盾），玩家碰触后激活对应强化效果
+- 新增左侧 "Buff 时长" 面板：滑块范围 1x–5x（步进 0.5x），实时调整 buff 持续时长倍率，默认 1x
+- 新增飞机上下移动：支持 ↑↓ 方向键 / W S 键，全画布范围内自由移动，同时防止方向键触发页面滚动
+
+### Changed（变更）
+- 修改 `src/player.js`：`applyBuff` 新增 `multiplier` 参数；`update` 新增 `canvasH` 参数并添加 Y 轴边界限制
+- 修改 `src/main.js`：`preventKeys` 加入 ArrowUp/ArrowDown；`player.update` 传入 `CANVAS_H`；`_bindSidebar` 绑定 buff 时长滑块；`applyBuff` 传入 `_buffDurMultiplier`
+- 修改 `index.html`：新增 "Buff 时长" 面板 HTML 结构，敌机被击毁时 30% 概率掉落菱形 buff（速射/加速/护盾），玩家碰触后激活对应强化效果
 - 新增 Buff 效果：⚡速射（射速提升 2.5x + 三线弹，持续 5s）、💨加速（移速提升 60%，持续 5s）、🛡护盾（完全免疫伤害，持续 3s）
 - 新增左侧 HTML 侧边栏：存档面板（实时显示关卡/得分/生命/最高分/存档时间）+ 强化状态面板（buff 倒计时）+ 声音控制面板（开关 + 音量滑块）
 - 新增 `SoundManager.unlock()`：在用户首次按键/点击时主动解锁 AudioContext，修复浏览器 autoplay policy 导致的无声音问题

@@ -21,6 +21,8 @@ const elBuffList  = document.getElementById('buff-list');
 const elSoundBtn  = document.getElementById('soundToggle');
 const elVolSlider = document.getElementById('volSlider');
 const elVolVal    = document.getElementById('volVal');
+const elBuffDurSlider = document.getElementById('buffDurSlider');
+const elBuffDurVal    = document.getElementById('buffDurVal');
 
 const BUFF_LABELS = { rapid_fire: '⚡速射', speed_up: '💨加速', shield: '🛡护盾' };
 
@@ -70,6 +72,8 @@ class Game {
     this._gameOverSoundPlayed    = false;
     this._levelCompleteSoundPlayed = false;
 
+    this._buffDurMultiplier = 1;
+
     this._bindInput();
     this._bindSidebar();
     this._updateSidebar();
@@ -77,7 +81,7 @@ class Game {
 
   _bindInput() {
     this.keys = {};
-    const preventKeys = new Set(['ArrowLeft', 'ArrowRight', 'Space']);
+    const preventKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space']);
 
     window.addEventListener('keydown', (e) => {
       // 首次按键解锁音频
@@ -116,6 +120,13 @@ class Game {
       elVolVal.textContent = `${elVolSlider.value}%`;
       // 调音量时解锁并播放一个测试音
       this.sound.unlock();
+    });
+
+    // Buff 时长倍率滑块
+    elBuffDurSlider.addEventListener('input', () => {
+      const v = parseFloat(elBuffDurSlider.value);
+      elBuffDurVal.textContent = `${v}x`;
+      this._buffDurMultiplier = v;
     });
   }
 
@@ -171,7 +182,7 @@ class Game {
     if (this.state !== 'playing') return;
 
     this.frameCount++;
-    this.player.update(dt, this.keys, CANVAS_W, () => this.sound.shoot());
+    this.player.update(dt, this.keys, CANVAS_W, CANVAS_H, () => this.sound.shoot());
     this.enemyManager.update(dt, this.frameCount, this.level);
     this.buffManager.update(dt, CANVAS_H);
     this.bulletPool.update(dt);
@@ -206,7 +217,7 @@ class Game {
     // Buff 拾取
     const pickedBuff = this.buffManager.checkCollision(this.player);
     if (pickedBuff) {
-      this.player.applyBuff(pickedBuff);
+      this.player.applyBuff(pickedBuff, this._buffDurMultiplier);
       this.sound.buffPickup();
     }
 
