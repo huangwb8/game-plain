@@ -7,6 +7,19 @@
 ## [Unreleased]
 
 ### Added（新增）
+- 新增 `src/buff.js`：Buff 掉落系统，敌机被击毁时 30% 概率掉落菱形 buff（速射/加速/护盾），玩家碰触后激活对应强化效果
+- 新增 Buff 效果：⚡速射（射速提升 2.5x + 三线弹，持续 5s）、💨加速（移速提升 60%，持续 5s）、🛡护盾（完全免疫伤害，持续 3s）
+- 新增左侧 HTML 侧边栏：存档面板（实时显示关卡/得分/生命/最高分/存档时间）+ 强化状态面板（buff 倒计时）+ 声音控制面板（开关 + 音量滑块）
+- 新增 `SoundManager.unlock()`：在用户首次按键/点击时主动解锁 AudioContext，修复浏览器 autoplay policy 导致的无声音问题
+- 新增 `SoundManager.buffPickup()`：buff 拾取音效（上扬双音）
+- 新增 `SoundManager.setVolume()` / `toggle()`：支持运行时音量调节与静音切换，通过主 GainNode 统一控制
+
+### Changed（变更）
+- 修改 `src/player.js`：支持 buff 状态管理（`applyBuff`/`hasBuff`/`getActiveBuffs`），速射时机身变金色，护盾时显示紫色光晕，加速时显示青色光晕
+- 修改 `src/sound.js`：引入主 GainNode 统一音量控制，所有音效路由经 masterGain 输出
+- 修改 `index.html`：布局改为 flex row，左侧 160px 侧边栏 + 右侧 canvas，深色主题与游戏风格一致
+- 修改 `src/main.js`：集成 BuffManager，每帧同步侧边栏状态，护盾期间跳过碰撞检测
+- 修改 `AGENTS.md`：增加 `awesome-code` 协作规范（默认自决不反问）与交付前构建/冒烟验证门槛
 - 新增"打飞机"纵向卷轴射击游戏实现：`src/main.js`、`src/player.js`、`src/enemy.js`、`src/bullet.js`、`src/ui.js`
 - 新增 `src/sound.js`：基于 Web Audio API 的程序化音效系统（射击、爆炸、受击、通关、游戏结束）
 - 新增 `src/save.js`：localStorage 存档管理器，支持进度保存/恢复/清除
