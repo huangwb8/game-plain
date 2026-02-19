@@ -44,7 +44,15 @@ export class SoundManager {
 
   _play(fn) {
     if (!this.enabled) return;
-    try { fn(this._getCtx(), this._dest()); } catch (_) { /* 忽略音频错误 */ }
+    const ctx = this._getCtx();
+    const dest = this._masterGain;
+    const doPlay = () => { try { fn(ctx, dest); } catch (_) {} };
+    // resume() 是异步的，必须等它完成后再播放，否则首次加载时声音会被丢弃
+    if (ctx.state === 'running') {
+      doPlay();
+    } else {
+      ctx.resume().then(doPlay).catch(() => {});
+    }
   }
 
   // 射击音效：短促高频脉冲
