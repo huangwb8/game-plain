@@ -7,7 +7,13 @@
 ## [Unreleased]
 
 ### Added（新增）
-- 新增“打飞机”纵向卷轴射击游戏实现：`src/main.js`、`src/player.js`、`src/enemy.js`、`src/bullet.js`、`src/ui.js`
+- 新增"打飞机"纵向卷轴射击游戏实现：`src/main.js`、`src/player.js`、`src/enemy.js`、`src/bullet.js`、`src/ui.js`
+- 新增 `src/sound.js`：基于 Web Audio API 的程序化音效系统（射击、爆炸、受击、通关、游戏结束）
+- 新增 `src/save.js`：localStorage 存档管理器，支持进度保存/恢复/清除
+- 新增通关机制：每关积累 500 分触发通关，暂停游戏并询问是否进入下一关（Enter/Space 继续）
+- 新增存档机制：通关时自动保存进度，游戏结束时保留最高分，下次启动自动恢复
+- 新增最高分显示（右下角 BEST 标签）
+- 新增存档恢复 Toast 提示（启动时若有存档则显示 3 秒）
 
 ### Changed（变更）
 - 更新 `index.html`：切换为加载 `src/main.js` 并使用单 Canvas（`#gameCanvas`）作为游戏渲染入口

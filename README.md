@@ -32,6 +32,7 @@ npm install
 ```bash
 # 启动开发服务器
 npm run dev
+# 然后打开浏览器访问 http://localhost:5173
 
 # 构建生产版本
 npm run build

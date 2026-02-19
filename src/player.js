@@ -11,7 +11,7 @@ export class Player {
     this.invincible = 0; // 秒
   }
 
-  update(dt, keys, canvasW) {
+  update(dt, keys, canvasW, onShoot) {
     // 移动
     if (keys['ArrowLeft'] || keys['KeyA']) this.x -= this.speed * dt;
     if (keys['ArrowRight'] || keys['KeyD']) this.x += this.speed * dt;
@@ -24,6 +24,7 @@ export class Player {
     if ((keys['Space'] || keys['KeyZ']) && this._fireCooldown <= 0) {
       this.bulletPool.spawn(this.x + this.w / 2, this.y);
       this._fireCooldown = this.fireRate;
+      if (onShoot) onShoot();
     }
 
     if (this.invincible > 0) this.invincible -= dt;
